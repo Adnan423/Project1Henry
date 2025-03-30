@@ -133,3 +133,81 @@ class RecipeListPage extends StatelessWidget {
     );
   }
 }
+
+// ---------------- Recipe Detail Page ----------------
+class RecipeDetailPage extends StatelessWidget {
+  final Map<String, String> recipe;
+
+  RecipeDetailPage({required this.recipe});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(recipe['title']!)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              recipe['image']!,
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Icon(Icons.image_not_supported, size: 100),
+            ),
+            SizedBox(height: 16),
+            Text(recipe['title']!, style: Theme.of(context).textTheme.titleLarge),
+            SizedBox(height: 12),
+            Text("Ingredients:\n- Ingredient 1\n- Ingredient 2\n- Ingredient 3"),
+            SizedBox(height: 12),
+            Text("Steps:\n1. Step one\n2. Step two\n3. Step three"),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  icon: Icon(Icons.favorite_border),
+                  label: Text("Favorite"),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added to favorites')));
+                  },
+                ),
+                SizedBox(width: 12),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.calendar_today),
+                  label: Text("Add to Plan"),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => MealPlannerPage()));
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- Favorites Page ----------------
+class FavoritesPage extends StatelessWidget {
+  final List<String> favorites = ['Vegan Pasta', 'Grilled Vegetables'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Favorite Recipes")),
+      body: favorites.isEmpty
+          ? Center(child: Text("No favorite recipes yet!"))
+          : ListView.builder(
+        itemCount: favorites.length,
+        itemBuilder: (_, index) {
+          return ListTile(
+            title: Text(favorites[index]),
+            trailing: Icon(Icons.favorite, color: Colors.red),
+          );
+        },
+      ),
+    );
+  }
+}
