@@ -98,16 +98,24 @@ class HomeScreen extends StatelessWidget {
 class RecipeListPage extends StatelessWidget {
   final String category;
 
-  final List<Map<String, String>> recipes = [
-    {'title': 'Grilled Vegetables', 'image': 'assets/grilled_vegetables.jpg'},
-    {'title': 'Vegan Pasta', 'image': 'assets/vegan_pasta.jpg'},
-    {'title': 'Gluten-Free Pancakes', 'image': 'assets/gluten_free_pancakes.jpg'},
-  ];
+  final Map<String, List<Map<String, String>>> categorizedRecipes = {
+    'Vegetarian': [
+      {'title': 'Grilled Vegetables', 'image': 'assets/grilled_vegetables.jpg'},
+    ],
+    'Vegan': [
+      {'title': 'Vegan Pasta', 'image': 'assets/vegan_pasta.jpg'},
+    ],
+    'Gluten-Free': [
+      {'title': 'Gluten-Free Pancakes', 'image': 'assets/gluten_free_pancakes.jpg'},
+    ],
+  };
 
   RecipeListPage({required this.category});
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> recipes = categorizedRecipes[category] ?? [];
+
     return Scaffold(
       appBar: AppBar(title: Text('$category Recipes')),
       body: ListView.builder(
@@ -134,13 +142,91 @@ class RecipeListPage extends StatelessWidget {
   }
 }
 
+// ---------------- Recipe Detail Page ----------------
+class RecipeDetailPage extends StatelessWidget {
+  final Map<String, String> recipe;
+
+  RecipeDetailPage({required this.recipe});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(recipe['title']!)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              recipe['image']!,
+              width: double.infinity,
+              height: 200,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Icon(Icons.image_not_supported, size: 100),
+            ),
+            SizedBox(height: 16),
+            Text(recipe['title']!, style: Theme.of(context).textTheme.titleLarge),
+            SizedBox(height: 12),
+            Text("Ingredients:\n- Ingredient 1\n- Ingredient 2\n- Ingredient 3"),
+            SizedBox(height: 12),
+            Text("Steps:\n1. Step one\n2. Step two\n3. Step three"),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  icon: Icon(Icons.favorite_border),
+                  label: Text("Favorite"),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added to favorites')));
+                  },
+                ),
+                SizedBox(width: 12),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.calendar_today),
+                  label: Text("Add to Plan"),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => MealPlannerPage()));
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- Favorites Page ----------------
+class FavoritesPage extends StatelessWidget {
+  final List<String> favorites = ['Vegan Pasta', 'Grilled Vegetables'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Favorite Recipes")),
+      body: favorites.isEmpty
+          ? Center(child: Text("No favorite recipes yet!"))
+          : ListView.builder(
+        itemCount: favorites.length,
+        itemBuilder: (_, index) {
+          return ListTile(
+            title: Text(favorites[index]),
+            trailing: Icon(Icons.favorite, color: Colors.red),
+          );
+        },
+      ),
+    );
+  }
+}
+
 // ---------------- Meal Planner Page ----------------
 class MealPlannerPage extends StatefulWidget {
   @override
   _MealPlannerPageState createState() => _MealPlannerPageState();
 }
 
-class MealPlannerPageState extends State<MealPlannerPage> {
+class _MealPlannerPageState extends State<MealPlannerPage> {
   final Map<String, String> mealPlan = {};
   final List<String> meals = ['Grilled Vegetables', 'Vegan Pasta', 'Gluten-Free Pancakes'];
 
@@ -151,7 +237,7 @@ class MealPlannerPageState extends State<MealPlannerPage> {
       appBar: AppBar(title: Text("Meal Planner")),
       body: ListView.builder(
         itemCount: days.length,
-        itemBuilder: (, index) {
+        itemBuilder: (_, index) {
           final day = days[index];
           return ListTile(
             title: Text(day),
