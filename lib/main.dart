@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FavoriteManager {
   static final FavoriteManager _instance = FavoriteManager._internal();
@@ -40,7 +41,7 @@ class RecipeApp extends StatelessWidget {
         primaryColor: Colors.deepOrange,
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.deepOrange,
-          titleTextStyle: TextStyle(
+          titleTextStyle: GoogleFonts.poppins(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -56,7 +57,7 @@ class RecipeApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
           ),
         ),
-        textTheme: TextTheme(
+        textTheme: GoogleFonts.poppinsTextTheme().copyWith(
           bodyMedium: TextStyle(fontSize: 16, color: Colors.black87),
           titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepOrange),
         ),
@@ -281,10 +282,23 @@ Widget build(BuildContext context) {
           Text(recipe['title']!, style: Theme.of(context).textTheme.titleLarge),
           SizedBox(height: 12),
           Text("Ingredients:", style: TextStyle(fontWeight: FontWeight.bold)),
-          ...ingredients.map((item) => Text('- $item')).toList(),
+          ...ingredients.map((item) => Row(
+            children: [
+              Icon(Icons.check, size: 16, color: Colors.deepOrange),
+              SizedBox(width: 6),
+              Expanded(child: Text(item)),
+            ],
+          )).toList(),
           SizedBox(height: 12),
           Text("Steps:", style: TextStyle(fontWeight: FontWeight.bold)),
-          ...steps.asMap().entries.map((e) => Text('${e.key + 1}. ${e.value}')).toList(),
+          ...steps.asMap().entries.map((e) => Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.arrow_right, color: Colors.deepOrange),
+              SizedBox(width: 6),
+              Expanded(child: Text('${e.key + 1}. ${e.value}')),
+            ],
+          )).toList(),
           SizedBox(height: 20),
           Row(
             children: [
