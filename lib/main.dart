@@ -101,12 +101,18 @@ class RecipeListPage extends StatelessWidget {
   final Map<String, List<Map<String, String>>> categorizedRecipes = {
     'Vegetarian': [
       {'title': 'Grilled Vegetables', 'image': 'assets/grilled_vegetables.jpg'},
+      {'title': 'Stuffed Bell Peppers', 'image': 'assets/stuffed_peppers.jpg'},
+      {'title': 'Caprese Salad', 'image': 'assets/caprese_salad.jpg'},
     ],
     'Vegan': [
       {'title': 'Vegan Pasta', 'image': 'assets/vegan_pasta.jpg'},
+      {'title': 'Tofu Stir Fry', 'image': 'assets/tofu_stirfry.jpg'},
+      {'title': 'Lentil Soup', 'image': 'assets/lentil_soup.jpg'},
     ],
     'Gluten-Free': [
       {'title': 'Gluten-Free Pancakes', 'image': 'assets/gluten_free_pancakes.jpg'},
+      {'title': 'Quinoa Salad', 'image': 'assets/quinoa_salad.jpg'},
+      {'title': 'Zucchini Noodles', 'image': 'assets/zucchini_noodles.jpg'},
     ],
   };
 
@@ -228,7 +234,17 @@ class MealPlannerPage extends StatefulWidget {
 
 class _MealPlannerPageState extends State<MealPlannerPage> {
   final Map<String, String> mealPlan = {};
-  final List<String> meals = ['Grilled Vegetables', 'Vegan Pasta', 'Gluten-Free Pancakes'];
+  final List<String> meals = [
+    'Grilled Vegetables',
+    'Stuffed Bell Peppers',
+    'Caprese Salad',
+    'Vegan Pasta',
+    'Tofu Stir Fry',
+    'Lentil Soup',
+    'Gluten-Free Pancakes',
+    'Quinoa Salad',
+    'Zucchini Noodles',
+  ];
 
   @override
   Widget build(BuildContext context) {
